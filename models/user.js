@@ -6,7 +6,12 @@ const UserSchema = new Schema({
   last_name: { type: String, required: true },
   email: { type: String, unique: true, required: true },
   password: { type: String, required: true },
-  friends: [Schema.Types.ObjectId],
+  friends: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
   is_admin: { type: Boolean, default: false },
 });
 
