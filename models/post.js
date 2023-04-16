@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-
+// POST MODEL 
 const PostSchema = new Schema({
   author: { type: Schema.Types.ObjectId, required: true },
   content: { type: String, required: true },

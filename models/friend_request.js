@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-
+// FRIEND REQUEST MODEL
 const FriendRequestSchema = new Schema({
   from_user: { type: Schema.Types.ObjectId, required: true },
   to_user: { type: Schema.Types.ObjectId, required: true },

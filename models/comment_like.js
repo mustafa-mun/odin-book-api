@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-
+// COMMENT LIKE MODEL
 const CommentLikeSchema = new Schema({
   user: { type: Schema.Types.ObjectId, required: true },
   post: { type: Schema.Types.ObjectId, required: true },
