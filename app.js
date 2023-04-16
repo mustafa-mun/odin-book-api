@@ -15,6 +15,15 @@ const app = express();
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
+const mongoose = require("mongoose");
+mongoose.set("strictQuery", false);
+const mongoDB = process.env.MONGODB_URI || process.env.LOCAL_URI;
+
+async function mongooseConnect() {
+  await mongoose.connect(mongoDB);
+}
+mongooseConnect().catch((err) => console.log(err));
+
 app.use(cors());
 app.use(logger("dev"));
 app.use(express.json());
