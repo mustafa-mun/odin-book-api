@@ -8,11 +8,13 @@ const ProfileSchema = new Schema({
     default:
       "https://www.nicepng.com/png/detail/933-9332131_profile-picture-default-png.png",
   },
-  about: { type: String, required: true },
-  posts:[{
-    type: Schema.Types.ObjectId,
-    ref: 'Post'
-  }],
+  about: { type: String, default: "About Me" },
+  posts: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Post",
+    },
+  ],
 });
 
 module.exports = mongoose.model("Profile", ProfileSchema);
