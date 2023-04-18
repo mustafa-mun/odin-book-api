@@ -4,7 +4,6 @@ const router = express.Router();
 const userController = require("../controllers/userController");
 const authController = require("../controllers/authController");
 
-router.get("/", userController.get_users);
 router.get("/:userId", userController.get_user_profile);
 router.post(
   "/friend-request/:userId",
