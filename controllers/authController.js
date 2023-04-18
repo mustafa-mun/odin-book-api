@@ -152,7 +152,7 @@ exports.post_signup = [
       userResult.profile = profileResult._id;
       await userResult.save();
       // Send newly created user
-      res.status(200).json({
+      res.status(201).json({
         user: userResult,
         profile: profileResult,
       });
