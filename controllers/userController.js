@@ -9,7 +9,7 @@ exports.get_user_profile = async (req, res, next) => {
       user: req.params.userId,
     }).populate({
       path: "user",
-      select: "first_name last_name friends", // include only the 'first_name' and 'last_name'
+      select: "first_name last_name friends", // include only the 'first_name', 'last_name' and 'friends'
       populate: {
         path: "friends", // populate the 'friends' array
         select: "first_name last_name", // include only the 'first_name' and 'last_name' fields of the friends
