@@ -92,7 +92,7 @@ exports.post_send_friend_request = async (req, res, next) => {
       if (database_to_user.friends.includes(database_from_user._id)) {
         return res.status(403).json({ error: "Users are already friends!" });
       }
-      // Save user on database
+      // Save friend request on database
       const result = await request.save();
       const savedRequest = await FriendRequest.findById(result._id)
         .populate("from_user", "first_name last_name")
@@ -103,7 +103,7 @@ exports.post_send_friend_request = async (req, res, next) => {
         return res.status(404).json({ error: "User not found!" });
       }
       // Return saved friend request
-      return res.status(200).json({ friend_request: savedRequest });
+      return res.status(201).json({ friend_request: savedRequest });
     }
     // There are already a friend request or user is trying to send request to himself
     return res.status(403).json({
