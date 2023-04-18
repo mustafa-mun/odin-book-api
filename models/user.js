@@ -13,6 +13,7 @@ const UserSchema = new Schema({
     },
   ],
   profile: { type: Schema.Types.ObjectId, ref: "Profile" },
+  register_date: { type: Date, default: Date.now },
   is_admin: { type: Boolean, default: false },
 });
 
