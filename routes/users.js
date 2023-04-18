@@ -5,6 +5,7 @@ const userController = require("../controllers/userController");
 const authController = require("../controllers/authController");
 
 router.get("/:userId", userController.get_user_profile);
+router.get("/:userId/friends", userController.get_user_friends);
 router.post(
   "/friend-request/:userId",
   authController.authenticateToken,

@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 // PROFILE MODEL
 const ProfileSchema = new Schema({
-  user: { type: Schema.Types.ObjectId, required: true },
+  user: { type: Schema.Types.ObjectId, ref: "User", required: true },
   profile_picture: {
     type: String,
     default:

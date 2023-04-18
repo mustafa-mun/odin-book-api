@@ -12,7 +12,7 @@ const UserSchema = new Schema({
       ref: "User",
     },
   ],
-  profile: { type: Schema.Types.ObjectId },
+  profile: { type: Schema.Types.ObjectId, ref: "Profile" },
   is_admin: { type: Boolean, default: false },
 });
 
