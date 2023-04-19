@@ -5,8 +5,11 @@ const router = express.Router();
  */
 const authController = require("../controllers/authController");
 
+// POST SIGN UP
 router.post("/signup", authController.post_signup);
+// POST LOGIN
 router.post("/login", authController.post_login);
+// POST LOGOUT
 router.post(
   "/logout",
   authController.authenticateToken,
