@@ -3,6 +3,10 @@ const router = express.Router();
 
 const userController = require("../controllers/userController");
 const authController = require("../controllers/authController");
+const user = require("../models/user");
+
+// GET ALL USERS
+router.get("/", userController.get_all_users);
 
 // GET USER PROFILE
 router.get("/:userId", userController.get_user_profile);
