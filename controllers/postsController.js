@@ -28,6 +28,14 @@ exports.create_post = [
       // Create and save new post
       const newPost = new Post(postFields);
       const savedPost = await newPost.save();
+
+      // Find authors profile and add post to posts array
+      const authorProfile = await UserProfile.findOne({
+        user: req.jwt_token.user.id,
+      });
+      authorProfile.posts.push(savedPost);
+      await authorProfile.save();
+
       // Return saved post
       return res.status(200).json({ post: savedPost });
     } catch (error) {
