@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-// POST MODEL 
+// POST MODEL
 const PostSchema = new Schema({
-  author: { type: Schema.Types.ObjectId, required: true },
+  author: { type: Schema.Types.ObjectId, ref: "User", required: true },
   content: { type: String, required: true },
   post_img: { type: String, default: "#" },
   created_at: { type: Date, default: Date.now },
