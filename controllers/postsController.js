@@ -1,4 +1,4 @@
-// This unused variables is undirectly being used for database populating
+// This unused variables are undirectly being used for database populating
 const User = require("../models/user");
 const PostLike = require("../models/post_like");
 const Comment = require("../models/comment");
@@ -49,7 +49,7 @@ exports.create_post = [
         author: req.jwt_token.user.id,
         content: req.body.content,
       };
-      // Include post img only if it's exists
+      // Include post img only if it exists
       if (req.body.post_img) {
         postFields.post_img = req.body.post_img;
       }
