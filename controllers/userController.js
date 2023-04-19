@@ -17,15 +17,17 @@ const { body, validationResult } = require("express-validator");
 exports.get_all_users = async (req, res, next) => {
   try {
     const users = await User.find({})
-      .select("-is_admin -username -passowrd")
+      .select("-is_admin -username -password") // Exclude private fields
       .populate({
+        // Populate friends array
         path: "friends",
-        select: "first_name last_name",
+        select: "first_name last_name", // Include only 'first name' and 'last name' fields
       })
       .populate({
-        path: "profile",
-        select: "profile_picture about",
+        path: "profile", // Populate profile
+        select: "profile_picture about", // Include only 'profile picture' and 'about' fields
       });
+    // Return users
     return res.status(200).json({ users });
   } catch (error) {
     return res.status(400).json({ error: error.message });
