@@ -5,8 +5,6 @@ const postsController = require("../controllers/postsController");
 const commentsController = require("../controllers/commentsController");
 const authController = require("../controllers/authController"); // To protect routes
 
-// GET TIMELINE POSTS
-router.get("/", postsController.get_timeline_posts);
 // GET SINGLE POST
 router.get("/:postId", postsController.get_post);
 // CREATE NEW POST

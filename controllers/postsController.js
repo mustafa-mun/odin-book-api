@@ -13,10 +13,6 @@ const { body, validationResult } = require("express-validator");
  *  - Delete post
 */
 
-exports.get_timeline_posts = async (req, res, next) => {
-  res.json({ message: "NOT IMPLEMENTED: Get timeline posts" });
-};
-
 exports.get_post = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.postId)
