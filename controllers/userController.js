@@ -1,6 +1,8 @@
 const User = require("../models/user");
 const UserProfile = require("../models/profile");
 const FriendRequest = require("../models/friend_request");
+const bcrypt = require("bcryptjs");
+const { body, validationResult } = require("express-validator");
 
 // GET USER PROFILE
 exports.get_user_profile = async (req, res, next) => {
@@ -43,6 +45,117 @@ exports.get_user_friends = async (req, res, next) => {
     }
 
     return res.status(200).json({ friends: user.friends });
+  } catch (error) {
+    return res.status(400).json({ error });
+  }
+};
+
+exports.update_user = [
+  body("first_name", "firstname can't be empty")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("last_name", "lastname can't be empty!")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("username", "username must be minimum 5 characters!")
+    .trim()
+    .isLength({ min: 5 })
+    .escape(),
+  body("password", "password must be minimum 8 characters!")
+    .trim()
+    .isLength({ min: 8 })
+    .escape(),
+  async (req, res, next) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      // There are errors
+      return res.status(400).json({
+        errors: errors.array(),
+      });
+    }
+    // Inputs are valid, update user
+    try {
+      // Find user
+      const user = await User.findById(req.params.userId);
+
+      if (!user) {
+        // User is not found
+        return res.status(404).json({ error: "User not found!" });
+      }
+
+      // Check if user is an admin or trying to update himself
+      if (
+        req.jwt_token.user.isAdmin ||
+        JSON.stringify(user._id) === JSON.stringify(req.jwt_token.user.id)
+      ) {
+        // User is valid
+        // Create a hashed password
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        const updatedUser = {
+          first_name: req.body.first_name,
+          last_name: req.body.last_name,
+          username: req.body.username,
+          password: hashedPassword,
+        };
+        // Update user with new data
+        const updateResult = await User.findByIdAndUpdate(
+          user._id,
+          updatedUser,
+          { new: true }
+        );
+        // Return the updated user
+        return res.status(200).json({ updated_user: updateResult });
+      } else {
+        // User is not an admin and trying to update another user
+        return res.status(401).json({
+          error: "Unauthorized",
+          message: "You are trying to update another user!",
+        });
+      }
+    } catch (error) {
+      // Handle duplicate usernames
+      if (error.code === 11000 && error.keyValue.username) {
+        res.status(400).json({
+          error: "Username already exists!",
+        });
+      } else {
+        res.status(400).json({
+          error,
+        });
+      }
+    }
+  },
+];
+
+exports.delete_user = async (req, res, next) => {
+  try {
+    // Find user
+    const user = await User.findById(req.params.userId);
+
+    if (!user) {
+      // User is not found
+      return res.status(404).json({ error: "User not found!" });
+    }
+
+    // Check if user is an admin or trying to delete himself
+    if (
+      req.jwt_token.user.isAdmin ||
+      JSON.stringify(user._id) === JSON.stringify(req.jwt_token.user.id)
+    ) {
+      // Delete user from the database
+      const deletedUser = await User.findByIdAndDelete(user._id);
+      // Return the deleted user
+      return res.status(200).json({ deleted_user: deletedUser });
+    } else {
+      // User is not an admin and trying to delete another user
+      return res.status(401).json({
+        error: "Unauthorized",
+        message: "You are trying to delete another user!",
+      });
+    }
   } catch (error) {
     return res.status(400).json({ error });
   }
@@ -140,7 +253,9 @@ exports.post_respond_to_friend_request = async (req, res, next) => {
     // Delete the request
     const deletedRequest = await FriendRequest.findByIdAndDelete(
       pendingRequest._id
-    );
+    )
+      .populate("from_user", "first_name last_name")
+      .populate("to_user", "first_name last_name");
     if (req.body.is_accepted) {
       // Friend request is accepted
       from_user.friends.push(to_user);

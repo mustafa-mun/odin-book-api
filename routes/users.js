@@ -6,6 +6,16 @@ const authController = require("../controllers/authController");
 
 router.get("/:userId", userController.get_user_profile);
 router.get("/:userId/friends", userController.get_user_friends);
+router.put(
+  "/:userId",
+  authController.authenticateToken,
+  userController.update_user
+);
+router.delete(
+  "/:userId",
+  authController.authenticateToken,
+  userController.delete_user
+);
 router.post(
   "/friend-request/:userId",
   authController.authenticateToken,
