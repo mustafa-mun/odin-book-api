@@ -1,6 +1,8 @@
 const User = require("../models/user");
 const UserProfile = require("../models/profile");
 const Post = require("../models/post");
+const PostLike = require("../models/post_like");
+const Comment = require("../models/comment");
 const { body, validationResult } = require("express-validator");
 
 exports.get_timeline_posts = async (req, res, next) => {
@@ -8,7 +10,24 @@ exports.get_timeline_posts = async (req, res, next) => {
 };
 
 exports.get_post = async (req, res, next) => {
-  res.json({ message: "NOT IMPLEMENTED: Get user post" });
+  try {
+    const post = await Post.findById(req.params.postId)
+      .populate({
+        path: "author",
+        select: "first_name last_name",
+      })
+      .populate("likes")
+      .populate("comments");
+
+    if (!post) {
+      // Post not found
+      return res.status(404).json({ error: "Post not found!" });
+    }
+    // Return post
+    return res.status(200).json({ post });
+  } catch (error) {
+    return res.status(400).json({ error: error.message });
+  }
 };
 
 exports.create_post = [
@@ -36,10 +55,10 @@ exports.create_post = [
       authorProfile.posts.push(savedPost);
       await authorProfile.save();
 
-      // Return saved post
-      return res.status(200).json({ post: savedPost });
+      // Return created post
+      return res.status(201).json({ post: savedPost });
     } catch (error) {
-      return res.status(400).json({ error });
+      return res.status(400).json({ error: error.message });
     }
   },
 ];
