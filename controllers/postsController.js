@@ -1,8 +1,10 @@
+// This unused variables is undirectly being used for database populating
 const User = require("../models/user");
-const UserProfile = require("../models/profile");
-const Post = require("../models/post");
 const PostLike = require("../models/post_like");
 const Comment = require("../models/comment");
+
+const UserProfile = require("../models/profile");
+const Post = require("../models/post");
 const { body, validationResult } = require("express-validator");
 
 exports.get_timeline_posts = async (req, res, next) => {
@@ -34,6 +36,13 @@ exports.create_post = [
   // Validate and sanitaze fields
   body("content", "Text can't be empty!").trim().isLength({ min: 1 }).escape(),
   async (req, res, next) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      // There are validation errors
+      return res.status(400).json({ errors: errors.array() });
+    }
+    // There are no errors, try to create new post
     try {
       // Create new post with inputs
       const postFields = {
