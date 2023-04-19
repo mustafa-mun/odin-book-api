@@ -11,7 +11,7 @@ exports.get_user_profile = async (req, res, next) => {
       user: req.params.userId,
     }).populate({
       path: "user",
-      select: "first_name last_name friends", // include only the 'first_name', 'last_name' and 'friends'
+      select: "first_name last_name posts friends", // include only these fields
       populate: {
         path: "friends", // populate the 'friends' array
         select: "first_name last_name", // include only the 'first_name' and 'last_name' fields of the friends
@@ -145,10 +145,21 @@ exports.delete_user = async (req, res, next) => {
       req.jwt_token.user.isAdmin ||
       JSON.stringify(user._id) === JSON.stringify(req.jwt_token.user.id)
     ) {
-      // Delete user from the database
+      // Delete user and profile from the database
       const deletedUser = await User.findByIdAndDelete(user._id);
-      // Return the deleted user
-      return res.status(200).json({ deleted_user: deletedUser });
+      const deletedProfile = await UserProfile.findOneAndDelete({
+        user: user._id,
+      });
+      // Remove the deleted user from the friends array of other users
+      await User.updateMany(
+        { friends: deletedUser._id },
+        { $pull: { friends: deletedUser._id } }
+      );
+
+      // Return the deleted user and profile
+      return res
+        .status(200)
+        .json({ deleted_user: deletedUser, deleted_profile: deletedProfile });
     } else {
       // User is not an admin and trying to delete another user
       return res.status(401).json({
