@@ -2,7 +2,6 @@ const User = require("../models/user");
 const UserProfile = require("../models/profile");
 const Post = require("../models/post");
 const { body, validationResult } = require("express-validator");
-const PostLike = require("../models/post_like"); // This can go into it's own controller 'likeController'
 
 exports.get_timeline_posts = async (req, res, next) => {
   res.json({ message: "NOT IMPLEMENTED: Get timeline posts" });
