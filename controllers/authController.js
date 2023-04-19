@@ -159,14 +159,11 @@ exports.post_signup = [
     } catch (error) {
       // Handle duplicate usernames
       if (error.code === 11000 && error.keyValue.username) {
-        const errors = ["Username already exists!"];
         res.status(400).json({
-          errors,
+          error: "Username already exists!",
         });
       } else {
-        res.status(400).json({
-          error,
-        });
+        return res.status(400).json({ error: error.message });
       }
     }
   },
@@ -218,8 +215,6 @@ exports.post_logout = async (req, res) => {
       result,
     });
   } catch (error) {
-    res.status(400).json({
-      error,
-    });
+    return res.status(400).json({ error: error.message });
   }
 };
