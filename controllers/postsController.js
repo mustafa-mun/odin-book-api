@@ -7,6 +7,12 @@ const UserProfile = require("../models/profile");
 const Post = require("../models/post");
 const { body, validationResult } = require("express-validator");
 
+/** 
+ * WHAT IS GOING TO BE IMPLEMENTED :
+ *  - Update post
+ *  - Delete post
+*/
+
 exports.get_timeline_posts = async (req, res, next) => {
   res.json({ message: "NOT IMPLEMENTED: Get timeline posts" });
 };

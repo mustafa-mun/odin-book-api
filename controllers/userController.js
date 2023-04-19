@@ -4,6 +4,14 @@ const FriendRequest = require("../models/friend_request");
 const bcrypt = require("bcryptjs");
 const { body, validationResult } = require("express-validator");
 
+/** 
+ * WHAT IS GOING TO BE IMPLEMENTED :
+ *  - Update user password
+ *  - Update user profile picture
+ *  - Update user about me 
+ * WITH THESE CHANGES, PROFILE REQUEST HANDLERS CAN GO INTO ITS OWN CONTROLLER CALLED 'profileController'
+*/
+
 // GET USER PROFILE
 exports.get_user_profile = async (req, res, next) => {
   try {
