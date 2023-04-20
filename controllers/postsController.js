@@ -7,11 +7,11 @@ const UserProfile = require("../models/profile");
 const Post = require("../models/post");
 const { body, validationResult } = require("express-validator");
 
-/** 
+/**
  * WHAT IS GOING TO BE IMPLEMENTED :
  *  - Update post
  *  - Delete post
-*/
+ */
 
 exports.get_post = async (req, res, next) => {
   try {
@@ -35,7 +35,7 @@ exports.get_post = async (req, res, next) => {
 };
 
 exports.create_post = [
-  // Validate and sanitaze fields
+  // Validate and sanitize fields
   body("content", "Text can't be empty!").trim().isLength({ min: 1 }).escape(),
   async (req, res, next) => {
     const errors = validationResult(req);
@@ -51,6 +51,7 @@ exports.create_post = [
         author: req.jwt_token.user.id,
         content: req.body.content,
       };
+
       // Include post img only if it exists
       if (req.body.post_img) {
         postFields.post_img = req.body.post_img;
@@ -74,10 +75,92 @@ exports.create_post = [
   },
 ];
 
-exports.update_post = async (req, res, next) => {
-  res.json({ message: "NOT IMPLEMENTED: Update post" });
-};
+exports.update_post = [
+  // Validate and sanitize fields
+  body("content", "Text can't be empty!").trim().isLength({ min: 1 }).escape(),
+  async (req, res, next) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      // There are errors
+      return res.status(400).json({ errors: errors.array() });
+    }
+    try {
+      // Input data is valid, find post
+      const post = await Post.findById(req.params.postId);
+      const user = req.jwt_token.user;
+      const author = post.author;
+
+      if (!post) {
+        // Post is not found
+        return res.status(404).json({ error: "Post not found!" });
+      }
+
+      // Post found, check if user is an admin or owner of the post
+      if (
+        user.isAdmin ||
+        JSON.stringify(author._id) === JSON.stringify(user.id)
+      ) {
+        // User is valid
+        const postFields = {
+          content: req.body.content,
+          updated_at: Date.now(),
+        };
+
+        // Include post img only if it exists
+        if (req.body.post_img) {
+          postFields.post_img = req.body.post_img;
+        }
+        // Update post with new input data
+        const updatedPost = await Post.findByIdAndUpdate(post._id, postFields, {
+          new: true,
+        }).populate({
+          path: "author",
+          select: "first_name last_name",
+        });
+        // Return updated post
+        return res.status(200).json({ updated_post: updatedPost });
+      }
+
+      // User is not an admin and trying to update other users post
+      return res.status(401).json({
+        error: "Unauthorized",
+        message: "You are trying to update another users post!",
+      });
+    } catch (error) {
+      return res.status(400).json({ error: error.message });
+    }
+  },
+];
 
 exports.delete_post = async (req, res, next) => {
-  res.json({ message: "NOT IMPLEMENTED: Delete post" });
+  try {
+    // Find post
+    const post = await Post.findById(req.params.postId);
+    const user = req.jwt_token.user;
+    const author = post.author;
+
+    if (!post) {
+      // Post not found
+      return res.status(404).json({ error: "Post not found!" });
+    }
+
+    // Check if user is an admin or posts owner
+    if (user.isAdmin || JSON.stringify(author) === JSON.stringify(user.id)) {
+      // Delete the post and return deleted post
+      const deletedPost = await Post.findByIdAndDelete(post._id).populate({
+        path: "author",
+        select: "first_name last_name",
+      });
+      return res.status(200).json({ deleted_post: deletedPost });
+    }
+
+    //  User is not an admin and trying to delete another users post
+    return res.status(403).json({
+      error: "Unauthorized",
+      message: "You are trying to delete another users post!",
+    });
+  } catch (error) {
+    return res.status(400).json({ error: error.message });
+  }
 };
