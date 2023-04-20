@@ -227,6 +227,7 @@ exports.post_send_friend_request = async (req, res, next) => {
 
     const database_from_user = await User.findById(from_user);
     const database_to_user = await User.findById(to_user);
+  
     // Check for duplicate requests
     const checkDuplicate = await FriendRequest.findOne({
       from_user,
@@ -241,9 +242,12 @@ exports.post_send_friend_request = async (req, res, next) => {
         to_user: req.params.userId,
       });
 
-      // Check if users are alreay friends
-      if (database_to_user.friends.includes(database_from_user._id)) {
-        return res.status(403).json({ error: "Users are already friends!" });
+      // If target user has friends
+      if (database_to_user.friends.length > 0) {
+        // Check if users are alreay friends
+        if (database_to_user.friends.includes(database_from_user._id)) {
+          return res.status(403).json({ error: "Users are already friends!" });
+        }
       }
       // Save friend request on database
       const result = await request.save();
