@@ -1,6 +1,6 @@
-const User = require("../../models/user");
-const UserProfile = require("../../models/profile");
-const FriendRequest = require("../../models/friend_request");
+const User = require("../../models/user-models/user");
+const UserProfile = require("../../models/user-models/profile");
+const FriendRequest = require("../../models/user-models/friend_request");
 const bcrypt = require("bcryptjs");
 const { body, validationResult } = require("express-validator");
 
@@ -227,7 +227,7 @@ exports.post_send_friend_request = async (req, res, next) => {
 
     const database_from_user = await User.findById(from_user);
     const database_to_user = await User.findById(to_user);
-  
+
     // Check for duplicate requests
     const checkDuplicate = await FriendRequest.findOne({
       from_user,
