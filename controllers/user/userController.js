@@ -1,6 +1,6 @@
-const User = require("../models/user");
-const UserProfile = require("../models/profile");
-const FriendRequest = require("../models/friend_request");
+const User = require("../../models/user");
+const UserProfile = require("../../models/profile");
+const FriendRequest = require("../../models/friend_request");
 const bcrypt = require("bcryptjs");
 const { body, validationResult } = require("express-validator");
 

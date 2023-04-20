@@ -1,5 +1,5 @@
-const Post = require("../models/post");
-const Comment = require("../models/comment");
+const Post = require("../../models/post");
+const Comment = require("../../models/comment");
 
 /** 
  * WHAT IS GOING TO BE IMPLEMENTED :

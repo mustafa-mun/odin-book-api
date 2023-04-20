@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
-const postsController = require("../controllers/postsController");
-const commentsController = require("../controllers/commentsController");
-const authController = require("../controllers/authController"); // To protect routes
+const postsController = require("../controllers/post/postsController");
+const commentsController = require("../controllers/post/commentsController");
+const authController = require("../controllers/user/authController"); // To protect routes
 
 // GET SINGLE POST
 router.get("/:postId", postsController.get_post);

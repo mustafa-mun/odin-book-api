@@ -3,7 +3,7 @@ const router = express.Router();
 /**
  * IMPLEMENT FACEBOOK LOGIN !!!
  */
-const authController = require("../controllers/authController");
+const authController = require("../controllers/user/authController");
 
 // POST SIGN UP
 router.post("/signup", authController.post_signup);

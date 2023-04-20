@@ -1,10 +1,10 @@
 // This unused variables are undirectly being used for database populating
-const User = require("../models/user");
-const PostLike = require("../models/post_like");
-const Comment = require("../models/comment");
+const User = require("../../models/user");
+const PostLike = require("../../models/post_like");
+const Comment = require("../../models/comment");
 
-const UserProfile = require("../models/profile");
-const Post = require("../models/post");
+const UserProfile = require("../../models/profile");
+const Post = require("../../models/post");
 const { body, validationResult } = require("express-validator");
 
 /**
