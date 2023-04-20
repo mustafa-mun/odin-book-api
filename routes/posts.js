@@ -17,7 +17,7 @@ router.put(
 );
 // DELETE POST
 router.delete(
-  "/postId",
+  "/:postId",
   authController.authenticateToken,
   postsController.delete_post
 );
