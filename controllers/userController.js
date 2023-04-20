@@ -56,8 +56,7 @@ exports.get_user_profile = async (req, res, next) => {
     // User is found, return the user profile
     return res.status(200).json({ profile });
   } catch (error) {
-    // return next(error);
-    return res.status(400).json({ error });
+    return res.status(400).json({ error: error.message });
   }
 };
 
@@ -76,7 +75,7 @@ exports.get_user_friends = async (req, res, next) => {
 
     return res.status(200).json({ friends: user.friends });
   } catch (error) {
-    return res.status(400).json({ error });
+    return res.status(400).json({ error: error.message });
   }
 };
 
@@ -153,7 +152,7 @@ exports.update_user = [
         });
       } else {
         res.status(400).json({
-          error,
+          error: error.message,
         });
       }
     }
@@ -198,7 +197,7 @@ exports.delete_user = async (req, res, next) => {
       });
     }
   } catch (error) {
-    return res.status(400).json({ error });
+    return res.status(400).json({ error: error.message });
   }
 };
 
@@ -265,7 +264,7 @@ exports.post_send_friend_request = async (req, res, next) => {
         "There is already a request or you are trying to send friend request to yourself!",
     });
   } catch (error) {
-    return res.status(400).json({ error });
+    return res.status(400).json({ error: error.message });
   }
 };
 
@@ -311,7 +310,7 @@ exports.post_respond_to_friend_request = async (req, res, next) => {
     // Return deleted request with updated is_accepted status
     return res.status(200).json({ deleted_request: deletedRequest });
   } catch (error) {
-    return res.status(400).json({ error });
+    return res.status(400).json({ error: error.message });
   }
 };
 
@@ -342,6 +341,6 @@ exports.delete_friend_request = async (req, res, next) => {
     // Return the deleted request
     return res.status(200).json({ deleted_request: deletedRequest });
   } catch (error) {
-    return res.status(400).json({ error });
+    return res.status(400).json({ error: error.message });
   }
 };
