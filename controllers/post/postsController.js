@@ -9,8 +9,8 @@ const { body, validationResult } = require("express-validator");
 
 /**
  * WHAT IS GOING TO BE IMPLEMENTED :
- *  - Update post
- *  - Delete post
+ *  - A query parameter url for sorting posts with date (/posts?sort=date)
+ *  - A query parameter url for limiting posts (/posts?limit=10)
  */
 
 exports.get_post = async (req, res, next) => {
