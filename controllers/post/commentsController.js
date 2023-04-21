@@ -8,3 +8,18 @@ const Comment = require("../../models/comment-models/comment");
  *  - Update a comment
  *  - Delete a comment
  */
+exports.get_post_comments = async (req, res, next) => {
+  res.json({ message: "NOT IMPLEMENTED: GET POST COMMENTS" });
+};
+
+exports.create_comment = async (req, res, next) => {
+  res.json({ message: "NOT IMPLEMENTED: CREATE COMMENT" });
+};
+
+exports.update_comment = async (req, res, next) => {
+  res.json({ message: "NOT IMPLEMENTED: UPDATE COMMENT" });
+};
+
+exports.delete_comment = async (req, res, next) => {
+  res.json({ message: "NOT IMPLEMENTED: DELETE COMMENT" });
+};
