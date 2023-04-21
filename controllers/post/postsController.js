@@ -100,10 +100,7 @@ exports.update_post = [
       }
 
       // Post found, check if user is owner of the post
-      if (
-        user.isAdmin ||
-        JSON.stringify(author._id) === JSON.stringify(user.id)
-      ) {
+      if (JSON.stringify(author._id) === JSON.stringify(user.id)) {
         // User is valid
         // Decode input
         const decodedInput = he.decode(req.body.content);
