@@ -99,7 +99,7 @@ exports.update_post = [
         return res.status(404).json({ error: "Post not found!" });
       }
 
-      // Post found, check if user is an admin or owner of the post
+      // Post found, check if user is owner of the post
       if (
         user.isAdmin ||
         JSON.stringify(author._id) === JSON.stringify(user.id)
@@ -127,7 +127,7 @@ exports.update_post = [
         return res.status(200).json({ updated_post: updatedPost });
       }
 
-      // User is not an admin and trying to update other users post
+      // User is trying to update other users post
       return res.status(401).json({
         error: "Unauthorized",
         message: "You are trying to update another users post!",
