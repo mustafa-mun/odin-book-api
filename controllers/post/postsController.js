@@ -152,6 +152,11 @@ exports.delete_post = async (req, res, next) => {
         path: "author",
         select: "first_name last_name",
       });
+      // Remove the deleted post from the posts array of other users
+      await UserProfile.updateMany(
+        { posts: deletedPost._id },
+        { $pull: { posts: deletedPost._id } }
+      );
       return res.status(200).json({ deleted_post: deletedPost });
     }
 
