@@ -6,10 +6,14 @@ const profileController = require("../controllers/user/profileController");
 const authController = require("../controllers/user/authController");
 
 // GET ALL USERS
-router.get("/", userController.get_all_users);
+router.get("/", authController.authenticateToken, userController.get_all_users);
 
 // GET USER PROFILE
-router.get("/:userId/profile", profileController.get_user_profile);
+router.get(
+  "/:userId/profile",
+  authController.authenticateToken,
+  profileController.get_user_profile
+);
 // UPDATE USER PASSWORD
 router.put(
   "/:userId/password",
@@ -29,7 +33,11 @@ router.put(
   profileController.update_about_me
 );
 // GET USERS FRIENDS
-router.get("/:userId/friends", userController.get_user_friends);
+router.get(
+  "/:userId/friends",
+  authController.authenticateToken,
+  userController.get_user_friends
+);
 // UPDATE USER
 router.put(
   "/:userId",
