@@ -1,13 +1,8 @@
 const User = require("../../models/user-models/user");
 const UserProfile = require("../../models/user-models/profile");
 const he = require("he");
-const bcryt = require("bcryptjs");
+const bcrypt = require("bcryptjs");
 const { body, validationResult } = require("express-validator");
-
-/**
- * WHAT IS GOING TO BE IMPLEMENTED :
- *  - Update user password
- */
 
 // GET USER PROFILE
 exports.get_user_profile = async (req, res, next) => {
@@ -69,9 +64,8 @@ exports.update_profile_picture = [
         return res.status(404).json({ error: "User not found!" });
       }
 
-      // Check if user is an admin or owner of the profile
+      // Check if user is owner of the profile
       if (
-        user.isAdmin ||
         JSON.stringify(user.id) === JSON.stringify(profile.user)
       ) {
         // User is valid, update the profile picture
@@ -88,7 +82,7 @@ exports.update_profile_picture = [
           .json({ updated_profile_picture: updatedPicture });
       }
 
-      // User is not an admin and trying to update another users profile picture
+      // User is trying to update another users profile picture
       return res.status(403).json({
         error: "Unauthorized",
         message: "You are not the owner of this profile!",
@@ -122,9 +116,8 @@ exports.update_about_me = [
         return res.status(404).json({ error: "User not found!" });
       }
 
-      // Check if user is an admin or owner of the profile
+      // Check if user is owner of the profile
       if (
-        user.isAdmin ||
         JSON.stringify(user.id) === JSON.stringify(profile.user)
       ) {
         // User is valid, update the about field
@@ -136,19 +129,69 @@ exports.update_about_me = [
           { new: true }
         ).select("about"); // Include only about for the returned document
         // Return the updated picture
-        return res
-          .status(200)
-          .json({ updated_about: updatedAbout });
+        return res.status(200).json({ updated_about: updatedAbout });
       }
 
-      // User is not an admin and trying to update another users about me
+      // User is trying to update another users about me
       return res.status(403).json({
         error: "Unauthorized",
         message: "You are not the owner of this profile!",
       });
-    } catch (error) {}
+    } catch (error) {
+      return res.status(400).json({ error: error.message });
+    }
   },
 ];
 
 // UPDATE PASSWORD
-exports.update_password = [];
+exports.update_password = [
+  body("password", "password must be minimum 8 characters!")
+    .trim()
+    .isLength({ min: 8 })
+    .escape(),
+  async (req, res, next) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      // There are errors
+      return res.status(400).json({
+        errors: errors.array(),
+      });
+    }
+    // There are no errors, try to update
+    try {
+      // Find the user
+      const user = await User.findById(req.params.userId);
+      const jwt_user = req.jwt_token.user;
+
+      if (!user) {
+        // User not found
+        return res.status(404).json({ error: "User not found!" });
+      }
+
+      // Check if trying to update his own password
+      if (JSON.stringify(user._id) === JSON.stringify(jwt_user.id)) {
+        // Create a hashed password
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        const updatedPassword = await User.findByIdAndUpdate(
+          user._id,
+          {
+            password: hashedPassword,
+          },
+          { new: true } // Return the updated document
+        ).select("password"); // Return only password field
+        // Return the updated user password
+        return res.status(200).json({ updated_password: updatedPassword });
+      }
+
+      // User is trying to update another users password
+      return res.status(403).json({
+        error: "Unauthorized",
+        message: "You are trying to update another users password!",
+      });
+    } catch (error) {
+      // Handle duplicate usernames
+      return res.status(400).json({ error: error.message });
+    }
+  },
+];
