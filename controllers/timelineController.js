@@ -12,3 +12,7 @@
  *      . If they are not friends already
  *      . There must be a some sort of link or redirection to send friend request
  */
+
+exports.get_timeline = async (req, res, next) => {
+  return res.status(200).json({ message: "NOT IMPLEMENTED: TIMELINE" });
+};
