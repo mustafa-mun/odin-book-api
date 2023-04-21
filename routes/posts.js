@@ -3,6 +3,7 @@ const router = express.Router();
 
 const postsController = require("../controllers/post/postsController");
 const commentsController = require("../controllers/post/commentsController");
+const likesController = require("../controllers/post/likesController");
 const authController = require("../controllers/user/authController"); // To protect routes
 
 /**
@@ -28,7 +29,6 @@ router.delete(
   authController.authenticateToken,
   postsController.delete_post
 );
-
 /**
  * Comment routes
  */
@@ -46,15 +46,54 @@ router.post(
 );
 // UPDATE COMMENT
 router.put(
-  "/:postId/comment/:commentId",
+  "/:postId/comments/:commentId",
   authController.authenticateToken,
   commentsController.update_comment
 );
 // DELETE COMMENT
 router.delete(
-  "/:postId/comment/:commentId",
+  "/:postId/comments/:commentId",
   authController.authenticateToken,
   commentsController.delete_comment
 );
 
+/**
+ * Like/Unlike routes
+ */
+// GET POST LIKES
+router.get(
+  "/:postId/likes",
+  authController.authenticateToken,
+  likesController.get_post_likes
+);
+// GET COMMENT LIKES
+router.get(
+  "/:postId/comments/:commentId/likes",
+  authController.authenticateToken,
+  likesController.get_comment_likes
+);
+// LIKE A POST
+router.put(
+  "/:postId/like",
+  authController.authenticateToken,
+  likesController.like_post
+);
+// LIKE A COMMENT
+router.put(
+  "/:postId/comments/:commentId/like",
+  authController.authenticateToken,
+  likesController.like_comment
+);
+// UNLIKE A POST
+router.put(
+  "/:postId/unlike",
+  authController.authenticateToken,
+  likesController.unlike_post
+);
+// UNLIKE A COMMENT
+router.put(
+  "/:postId/comments/:commentId/unlike",
+  authController.authenticateToken,
+  likesController.unlike_comment
+);
 module.exports = router;
