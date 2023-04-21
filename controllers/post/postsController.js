@@ -8,12 +8,6 @@ const Post = require("../../models/post-models/post");
 const he = require("he");
 const { body, validationResult } = require("express-validator");
 
-/**
- * WHAT IS GOING TO BE IMPLEMENTED :
- *  - A query parameter url for sorting posts with date (/posts?sort=date)
- *  - A query parameter url for limiting posts (/posts?limit=10)
- */
-
 exports.get_post = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.postId)

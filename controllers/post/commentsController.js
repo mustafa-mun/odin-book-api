@@ -9,8 +9,9 @@ const { body, validationResult } = require("express-validator");
 
 /**
  * WHAT IS GOING TO BE IMPLEMENTED :
- *  - Update a comment
- *  - Delete a comment
+ *  - A query parameter url for sorting comments with date (/posts/:postId/comments/:commentId?sort=date&order=asc) (ascending and descending order)
+ *  - A query parameter url for sorting comments with like (/posts/:postId/comments/:commentId?sort=like&order=asc) (ascending and descending order)
+ *  - A query parameter url for limiting comments (/posts/:postId/comments/:commentId?limit=10)
  */
 exports.get_post_comments = async (req, res, next) => {
   try {
