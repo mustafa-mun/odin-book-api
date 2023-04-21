@@ -9,7 +9,25 @@ const authController = require("../controllers/user/authController");
 router.get("/", userController.get_all_users);
 
 // GET USER PROFILE
-router.get("/:userId", profileController.get_user_profile);
+router.get("/:userId/profile", profileController.get_user_profile);
+// UPDATE USER PASSWORD
+router.put(
+  "/:userId/password",
+  authController.authenticateToken,
+  profileController.update_password
+);
+// UPDATE PROFILE PICTURE
+router.put(
+  "/:userId/profile-picture",
+  authController.authenticateToken,
+  profileController.update_profile_picture
+);
+// UPDATE PROFILE PICTURE
+router.put(
+  "/:userId/about-me",
+  authController.authenticateToken,
+  profileController.update_about_me
+);
 // GET USERS FRIENDS
 router.get("/:userId/friends", userController.get_user_friends);
 // UPDATE USER
