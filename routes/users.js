@@ -2,13 +2,14 @@ const express = require("express");
 const router = express.Router();
 
 const userController = require("../controllers/user/userController");
+const profileController = require("../controllers/user/profileController");
 const authController = require("../controllers/user/authController");
 
 // GET ALL USERS
 router.get("/", userController.get_all_users);
 
 // GET USER PROFILE
-router.get("/:userId", userController.get_user_profile);
+router.get("/:userId", profileController.get_user_profile);
 // GET USERS FRIENDS
 router.get("/:userId/friends", userController.get_user_friends);
 // UPDATE USER
