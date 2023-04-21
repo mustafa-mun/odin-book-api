@@ -5,6 +5,7 @@ const Comment = require("../../models/comment-models/comment");
 
 const UserProfile = require("../../models/user-models/profile");
 const Post = require("../../models/post-models/post");
+const he = require("he");
 const { body, validationResult } = require("express-validator");
 
 /**
@@ -47,9 +48,11 @@ exports.create_post = [
     // There are no errors, try to create new post
     try {
       // Create new post with inputs
+      // Decode input
+      const decodedInput = he.decode(req.body.content);
       const postFields = {
         author: req.jwt_token.user.id,
-        content: req.body.content,
+        content: decodedInput,
       };
 
       // Include post img only if it exists
@@ -102,8 +105,10 @@ exports.update_post = [
         JSON.stringify(author._id) === JSON.stringify(user.id)
       ) {
         // User is valid
+        // Decode input
+        const decodedInput = he.decode(req.body.content);
         const postFields = {
-          content: req.body.content,
+          content: decodedInput,
           updated_at: Date.now(),
         };
 
