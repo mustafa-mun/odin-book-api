@@ -177,7 +177,7 @@ exports.post_login = (req, res, next) => {
     if (!user) {
       // User not found
       return res.status(404).json({
-        message: "User not found",
+        message: "Password or username is wrong!",
       });
     }
     req.logIn(user, { session: false }, (err) => {
