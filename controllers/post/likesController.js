@@ -104,7 +104,7 @@ exports.like_post = async (req, res, next) => {
       path: "post", // Populate post field
       select: "content like_count", // Include only 'content' and 'like count'
     });
-    populatedLike.like_count += 1; // This is for return document
+    populatedLike.post.like_count += 1; // This is for return document
     post.likes.push(savedLike);
     post.like_count += 1; // This is for database
     await post.save();
@@ -166,7 +166,61 @@ exports.like_comment = async (req, res, next) => {
 };
 
 exports.unlike_post = async (req, res, next) => {
-  return res.json({ message: "NOT IMPLEMENTED: UNLIKE POST" });
+  try {
+    // Find post
+    const post = await Post.findById(req.params.postId);
+    // Find posts like
+    const like = await PostLike.findOne({
+      user: req.jwt_token.user.id,
+      post: req.params.postId,
+    });
+
+    if (!post) {
+      // Post not found
+      return res.status(404).json({ error: "Post not found!" });
+    }
+
+    if (!like) {
+      // Post is not liked
+      return res.status(400).json({ error: "Post is not liked!" });
+    }
+
+    if (
+      JSON.stringify(req.jwt_token.user.id) !== JSON.stringify(like.user._id)
+    ) {
+      // User is not the owner of like
+      return res.status(404).json({
+        error: "Unauthorized",
+        message: "You are not the owner of this like!",
+      });
+    }
+
+    // Delete the like
+    const deletedPostLike = await PostLike.findByIdAndDelete(like._id)
+      .populate({
+        path: "user",
+        select: "first_name last_name",
+      })
+      .populate({
+        path: "post",
+        select: "content like_count",
+      });
+    // Decrease posts like count by one
+    post.like_count -= 1;
+    deletedPostLike.post.like_count -= 1; // This is for return document
+    // Remove the deleted like from the likes array of other posts
+    await Post.updateMany(
+      { likes: deletedPostLike._id },
+      { $pull: { likes: deletedPostLike._id } }
+    );
+    // Save post
+    await post.save();
+
+    // Return deleted post
+    return res.status(200).json({ deleted_like: deletedPostLike });
+  } catch (error) {
+    return res.status(400).json({ error: error.message });
+  }
 };
 
 exports.unlike_comment = async (req, res, next) => {
