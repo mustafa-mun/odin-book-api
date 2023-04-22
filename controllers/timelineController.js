@@ -1,3 +1,6 @@
+const Post = require("../models/post-models/post");
+const User = require("../models/user-models/user");
+
 /**
  * WHAT IS GOING TO BE IMPLEMENTED :
  * /**
@@ -14,5 +17,19 @@
  */
 
 exports.get_timeline = async (req, res, next) => {
-  return res.status(200).json({ message: "NOT IMPLEMENTED: TIMELINE" });
+  try {
+    // Find user
+    const user = await User.findById(req.jwt_token.user.id).select("friends");
+    const friendIds = [user._id, ...user.friends];
+    // Find users and friends post
+    const posts = await Post.find({ author: { $in: friendIds } })
+      .select("-updated_at")
+      .populate({
+        path: "author",
+        select: "first_name last_name",
+      });
+    return res.json({ posts });
+  } catch (error) {
+    return res.status(400).json({ error: error.message });
+  }
 };
