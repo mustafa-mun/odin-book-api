@@ -1,7 +1,7 @@
 // This unused variables are undirectly being used for database populating
 const User = require("../../models/user-models/user");
-const CommentLike = require("../../models/comment-models/comment_like");
 
+const CommentLike = require("../../models/comment-models/comment_like");
 const Post = require("../../models/post-models/post");
 const Comment = require("../../models/comment-models/comment");
 const he = require("he");
@@ -220,6 +220,9 @@ exports.delete_comment = async (req, res, next) => {
         { comments: deletedComment._id },
         { $pull: { comments: deletedComment._id } }
       );
+      // Delete comments likes
+      await CommentLike.deleteMany({ comment: deletedComment._id });
+      // Return the deleted comment
       return res.status(200).json({ deleted_comment: deletedComment });
     }
 
