@@ -15,26 +15,41 @@ const { body, validationResult } = require("express-validator");
  */
 exports.get_post_comments = async (req, res, next) => {
   try {
-    // Find all comments
+    // Look for query sort parameters
+    const sort = req.query.sort;
+    // Look for query limit
+    const limit = req.query.limit;
+    // Find comments
     const comments = await Comment.find({ post: req.params.postId })
-      .select("-post")
+      .select("-post -updated_at")
       .populate({
         path: "author",
         select: "first_name last_name",
       })
       .populate({
         path: "likes",
-        select: "author content likes",
+        select: "user content likes",
         populate: {
-          path: "author",
+          path: "user",
           select: "first_name last_name",
         },
       });
-
     if (!comments) {
       // Post not found
       return res.status(404).json({ error: "Post not found!" });
     }
+
+    if (sort === "date") {
+      // Sort with date
+    } else if (sort === "like") {
+      // sort with like
+    }
+
+    if (limit) {
+      // Limit comments
+    }
+
+    // No query parameters
     // Return comments
     return res.status(200).json({ comments });
   } catch (error) {
