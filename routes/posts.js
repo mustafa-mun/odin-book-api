@@ -73,13 +73,13 @@ router.get(
   likesController.get_comment_likes
 );
 // LIKE A POST
-router.put(
+router.post(
   "/:postId/like",
   authController.authenticateToken,
   likesController.like_post
 );
 // LIKE A COMMENT
-router.put(
+router.post(
   "/:postId/comments/:commentId/like",
   authController.authenticateToken,
   likesController.like_comment
