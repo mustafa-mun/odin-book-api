@@ -1,10 +1,11 @@
 // This unused variables are undirectly being used for database populating
 const User = require("../../models/user-models/user");
-const PostLike = require("../../models/post-models/post_like");
-const Comment = require("../../models/comment-models/comment");
 
+const PostLike = require("../../models/post-models/post_like");
 const UserProfile = require("../../models/user-models/profile");
 const Post = require("../../models/post-models/post");
+const Comment = require("../../models/comment-models/comment");
+const CommentLike = require("../../models/comment-models/comment_like");
 const he = require("he");
 const { body, validationResult } = require("express-validator");
 
@@ -157,11 +158,27 @@ exports.delete_post = async (req, res, next) => {
         path: "author",
         select: "first_name last_name",
       });
+
       // Remove the deleted post from the posts array of other users
       await UserProfile.updateMany(
         { posts: deletedPost._id },
         { $pull: { posts: deletedPost._id } }
       );
+
+      // Get the comments that match the deletion criteria
+      const deletedComments = await Comment.find({ post: post._id }).select(
+        "_id"
+      );
+
+      // Delete all PostLikes associated with the deleted post
+      await PostLike.deleteMany({ post: post._id });
+
+      // Delete all CommentLikes associated with the deleted comments
+      await CommentLike.deleteMany({ comment: { $in: deletedComments } });
+
+      // Delete the comments
+      await Comment.deleteMany({ post: post._id });
+
       return res.status(200).json({ deleted_post: deletedPost });
     }
 
