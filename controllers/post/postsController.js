@@ -8,6 +8,11 @@ const Post = require("../../models/post-models/post");
 const he = require("he");
 const { body, validationResult } = require("express-validator");
 
+/**
+ * WHAT IS GOING TO BE IMPLEMENTED :
+ *  - When deleting a post, we need to delete all of its comments and commentlikes of this comments
+ */
+
 exports.get_post = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.postId)
