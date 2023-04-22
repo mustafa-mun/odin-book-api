@@ -6,6 +6,7 @@ const path = require("path");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const seed = require("./seed");
 require("dotenv").config();
 
 const indexRouter = require("./routes/index");
