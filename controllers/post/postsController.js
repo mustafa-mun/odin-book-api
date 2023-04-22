@@ -11,7 +11,9 @@ const { body, validationResult } = require("express-validator");
 
 /**
  * WHAT IS GOING TO BE IMPLEMENTED :
- *  - When deleting a post, we need to delete all of its comments and commentlikes of this comments
+ *  - A query parameter url for sorting posts with date (/posts?sort=like&order=asc) (ascending and descending )
+ *  - A query parameter url for sorting posts with like (/posts?sort=like&order=asc) (ascending and descending )
+ *  - A query parameter url for limiting posts (/posts?limit=10)
  */
 
 exports.get_post = async (req, res, next) => {
