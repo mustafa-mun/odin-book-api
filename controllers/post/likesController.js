@@ -14,7 +14,28 @@ const User = require("../../models/user-models/user");
  */
 
 exports.get_post_likes = async (req, res, next) => {
-  return res.json({ message: "NOT IMPLEMENTED: GET POST LIKES" });
+  try {
+    // Find post
+    const post = await Post.findById(req.params.postId);
+
+    if (!post) {
+      // Post not found
+      return res.status(404).json({ error: "Post not found" });
+    }
+    // Find posts likes
+    const postLikes = await PostLike.find({ post: post._id })
+      .select("-post") // Exclude 'post'
+      .populate({
+        path: "user", // Populate user field
+        select: "first_name last_name", // Include only 'first name' and 'last name'
+      });
+    // Return post likes and like count of the post
+    return res
+      .status(200)
+      .json({ likes: postLikes, like_count: post.like_count });
+  } catch (error) {
+    return res.status(400).json({ error: error.message });
+  }
 };
 
 exports.get_comment_likes = async (req, res, next) => {
