@@ -4,16 +4,6 @@ const CommentLike = require("../../models/comment-models/comment_like");
 const Comment = require("../../models/comment-models/comment");
 const User = require("../../models/user-models/user");
 
-/**
- * WHAT IS GOING TO BE IMPLEMENTED :
- *  - Get post likes
- *  - Get comment likes
- *  - Like comment
- *  - LIke post
- *  - Unlike comment like
- *  - Unlike post like
- */
-
 exports.get_post_likes = async (req, res, next) => {
   try {
     // Find post
