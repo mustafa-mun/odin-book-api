@@ -56,6 +56,10 @@ exports.create_post = [
       // Create and save new post
       const newPost = new Post(postFields);
       const savedPost = await newPost.save();
+      const populatedPost = await Post.findById(savedPost._id).populate({
+        path: "author",
+        select: "first_name last_name",
+      });
 
       // Find authors profile and add post to posts array
       const authorProfile = await UserProfile.findOne({
@@ -65,7 +69,7 @@ exports.create_post = [
       await authorProfile.save();
 
       // Return created post
-      return res.status(201).json({ post: savedPost });
+      return res.status(201).json({ post: populatedPost });
     } catch (error) {
       return res.status(400).json({ error: error.message });
     }
