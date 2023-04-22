@@ -189,7 +189,7 @@ exports.unlike_post = async (req, res, next) => {
       JSON.stringify(req.jwt_token.user.id) !== JSON.stringify(like.user._id)
     ) {
       // User is not the owner of like
-      return res.status(404).json({
+      return res.status(403).json({
         error: "Unauthorized",
         message: "You are not the owner of this like!",
       });
@@ -224,5 +224,67 @@ exports.unlike_post = async (req, res, next) => {
 };
 
 exports.unlike_comment = async (req, res, next) => {
-  return res.json({ message: "NOT IMPLEMENTED: UNLIKE COMMENT" });
+  try {
+    // Find comment
+    const comment = await Comment.findById(req.params.commentId);
+    // Find comments like
+    const like = await CommentLike.findOne({
+      user: req.jwt_token.user.id,
+      comment: req.params.commentId,
+    });
+
+    if (!comment) {
+      // Comment not found
+      return res.status(404).json({ error: "Comment not found!" });
+    }
+
+    // Check if post has comment with req.params.commentId
+    if (JSON.stringify(comment.post) !== JSON.stringify(req.params.postId)) {
+      // Post has no such a comment
+      return res
+        .status(404)
+        .json({ error: "Comment not belong to this post!" });
+    }
+
+    if (!like) {
+      // Comment is not liked
+      return res.status(400).json({ error: "Comment is not liked!" });
+    }
+
+    if (
+      JSON.stringify(req.jwt_token.user.id) !== JSON.stringify(like.user._id)
+    ) {
+      // User is not the owner of like
+      return res.status(403).json({
+        error: "Unauthorized",
+        message: "You are not the owner of this like!",
+      });
+    }
+
+    // Delete the like
+    const deletedCommentLike = await CommentLike.findByIdAndDelete(like._id)
+      .populate({
+        path: "user",
+        select: "first_name last_name",
+      })
+      .populate({
+        path: "comment",
+        select: "content like_count",
+      });
+    // Decrease comments like count by one
+    comment.like_count -= 1;
+    deletedCommentLike.comment.like_count -= 1; // This is for return document
+    // Remove the deleted like from the likes array of other comments
+    await Comment.updateMany(
+      { likes: deletedCommentLike._id },
+      { $pull: { likes: deletedCommentLike._id } }
+    );
+    // Save comment
+    await comment.save();
+
+    // Return deleted comment
+    return res.status(200).json({ deleted_like: deletedCommentLike });
+  } catch (error) {
+    return res.status(400).json({ error: error.message });
+  }
 };
