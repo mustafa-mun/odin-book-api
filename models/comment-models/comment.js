@@ -13,6 +13,7 @@ const CommentSchema = new Schema({
   ],
   created_at: { type: Date, default: Date.now },
   updated_at: { type: Date, default: Date.now },
+  like_count: { type: Number, default:0 }
 });
 
 module.exports = mongoose.model("Comment", CommentSchema);
