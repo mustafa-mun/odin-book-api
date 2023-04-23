@@ -5,20 +5,12 @@ const CommentLike = require("../../models/comment-models/comment_like");
 const Post = require("../../models/post-models/post");
 const Comment = require("../../models/comment-models/comment");
 const he = require("he");
+const handleReq = require("../handlers/query");
 const { body, validationResult } = require("express-validator");
 
-/**
- * WHAT IS GOING TO BE IMPLEMENTED :
- *  - A query parameter url for sorting comments with date (/posts/:postId/comments/:commentId?sort=date&order=asc) (ascending and descending order)
- *  - A query parameter url for sorting comments with like (/posts/:postId/comments/:commentId?sort=like&order=asc) (ascending and descending order)
- *  - A query parameter url for limiting comments (/posts/:postId/comments/:commentId?limit=10)
- */
 exports.get_post_comments = async (req, res, next) => {
   try {
-    // Look for query sort parameters
-    const sort = req.query.sort;
-    // Look for query limit
-    const limit = req.query.limit;
+    const query = handleReq.handleQuery(req);
     // Find comments
     const comments = await Comment.find({ post: req.params.postId })
       .select("-post -updated_at")
@@ -33,20 +25,13 @@ exports.get_post_comments = async (req, res, next) => {
           path: "user",
           select: "first_name last_name",
         },
-      });
+      })
+      .sort(query.sortObject)
+      .limit(query.limit);
+
     if (!comments) {
       // Post not found
       return res.status(404).json({ error: "Post not found!" });
-    }
-
-    if (sort === "date") {
-      // Sort with date
-    } else if (sort === "like") {
-      // sort with like
-    }
-
-    if (limit) {
-      // Limit comments
     }
 
     // No query parameters

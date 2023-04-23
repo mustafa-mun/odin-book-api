@@ -1,8 +1,10 @@
 const Post = require("../models/post-models/post");
 const User = require("../models/user-models/user");
+const handleReq = require("../controllers/handlers/query");
 
 exports.get_timeline = async (req, res, next) => {
   try {
+    const query = handleReq.handleQuery(req);
     // Find user
     const user = await User.findById(req.jwt_token.user.id).select("friends");
     // User and friends ids
@@ -13,7 +15,9 @@ exports.get_timeline = async (req, res, next) => {
       .populate({
         path: "author",
         select: "first_name last_name",
-      });
+      })
+      .sort(query.sortObject)
+      .limit(query.limit);
     // Find users that not friends with current user
     const friendRecommendations = await User.find({
       _id: { $nin: friendIds },
