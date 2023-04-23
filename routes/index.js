@@ -1,14 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
-/** 
- * WHAT IS GOING TO BE IMPLEMENTED :
- *  - If user signed in redirect to timeline, otherwise redirect to sign in  
-*/
-
-/* GET home page. */
+/* GET API docs. */
 router.get("/", function (req, res, next) {
-  res.json({ message: "NOT IMPLEMENTED: API DOCS" });
+  res.redirect("/api-docs")
 });
 
 module.exports = router;

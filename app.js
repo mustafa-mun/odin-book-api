@@ -2,12 +2,38 @@ const session = require("express-session");
 const passport = require("passport");
 const createError = require("http-errors");
 const express = require("express");
-const path = require("path");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
-const seed = require("./seed");
+const swaggerUI = require("swagger-ui-express");
+const swaggerJsDoc = require("swagger-jsdoc");
+// const seed = require("./seed");
 require("dotenv").config();
+
+// Initialize swagger-jsdoc
+const options = {
+  swaggerDefinition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Blog API",
+      version: "1.0.0",
+      description:
+        "Here is the API documentation for My Blog API. Please note that authentication is required and you must obtain a token by logging in before making requests to protected routes.",
+      contact: {
+        name: "Mustafa",
+        email: "beginnerdev7@gmail.com",
+      },
+    },
+    servers: [
+      {
+        url: "https://localhost:8080",
+      },
+    ],
+  },
+  apis: ["./routes/*.js"],
+};
+
+const specs = swaggerJsDoc(options);
 
 const indexRouter = require("./routes/index");
 const authRouter = require("./routes/auth");
@@ -35,6 +61,7 @@ app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 app.use("/", indexRouter);
 app.use("/auth", authRouter);
 app.use("/users", usersRouter);
