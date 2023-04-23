@@ -9,13 +9,6 @@ const CommentLike = require("../../models/comment-models/comment_like");
 const he = require("he");
 const { body, validationResult } = require("express-validator");
 
-/**
- * WHAT IS GOING TO BE IMPLEMENTED :
- *  - A query parameter url for sorting posts with date (/posts?sort=like&order=asc) (ascending and descending )
- *  - A query parameter url for sorting posts with like (/posts?sort=like&order=asc) (ascending and descending )
- *  - A query parameter url for limiting posts (/posts?limit=10)
- */
-
 exports.get_post = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.postId)
