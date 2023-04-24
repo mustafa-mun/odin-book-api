@@ -185,9 +185,9 @@ const authController = require("../controllers/user/authController");
 
 /**
  * @swagger
- * /users/{userId}:
+ * /users/{userId}/:
  *   get:
- *     summary: Get user profile
+ *     summary: Get users profile
  *     security:
  *       - BearerAuth: []
  *     description: Use this endpoint to get users profile.
@@ -199,18 +199,19 @@ const authController = require("../controllers/user/authController");
  *         schema:
  *           type: string
  *         required: true
- *         description: The id of the user to get the profile.
+ *         description: The id of the user to get profile.
  *     produces:
  *       - application/json
  *     responses:
  *       200:
- *         description: Profile of the user
+ *         description: Users profile
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 $ref: '#/components/schemas/Profile'
+ *                type: object
+ *                properties:
+ *                  profile:
+ *                    $ref: '#/components/schemas/Profile'
  *       400:
  *         description: Invalid input data
  *         content:
