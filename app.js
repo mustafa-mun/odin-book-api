@@ -15,12 +15,12 @@ const options = {
   swaggerDefinition: {
     openapi: "3.0.0",
     info: {
-      title: "Blog API",
+      title: "ODIN-BOOK API",
       version: "1.0.0",
       description:
-        "Here is the API documentation for My Blog API. Please note that authentication is required and you must obtain a token by logging in before making requests to protected routes.",
+        "Here is the API documentation for My Odin-book API. Please note that authentication is required and you must obtain a token by logging in before making requests to protected routes.",
       contact: {
-        name: "Mustafa",
+        name: "me",
         email: "beginnerdev7@gmail.com",
       },
     },

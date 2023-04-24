@@ -204,7 +204,7 @@ const authController = require("../controllers/user/authController");
  *       - application/json
  *     responses:
  *       200:
- *         description: Profile of the user 
+ *         description: Profile of the user
  *         content:
  *           application/json:
  *             schema:
@@ -221,7 +221,7 @@ const authController = require("../controllers/user/authController");
  *                 error:
  *                   type: string
  *                   description: A message describing the error.
- *       
+ *
  *       403:
  *         description: Forbidden
  *         content:
@@ -231,7 +231,7 @@ const authController = require("../controllers/user/authController");
  *               properties:
  *                 error:
  *                   type: string
- *                   description: A message describing the error.       
+ *                   description: A message describing the error.
  *       401:
  *         description: Unauthorized, take your token
  *         content:
@@ -251,7 +251,7 @@ const authController = require("../controllers/user/authController");
  *               properties:
  *                 error:
  *                   type: string
- *                   description: A message describing the error.       
+ *                   description: A message describing the error.
  */
 
 /**
@@ -275,7 +275,7 @@ const authController = require("../controllers/user/authController");
  *       - application/json
  *     responses:
  *       200:
- *         description: Array of users friends 
+ *         description: Array of users friends
  *         content:
  *           application/json:
  *             schema:
@@ -292,7 +292,7 @@ const authController = require("../controllers/user/authController");
  *                 error:
  *                   type: string
  *                   description: A message describing the error.
- *       
+ *
  *       403:
  *         description: Forbidden
  *         content:
@@ -302,7 +302,7 @@ const authController = require("../controllers/user/authController");
  *               properties:
  *                 error:
  *                   type: string
- *                   description: A message describing the error.       
+ *                   description: A message describing the error.
  *       401:
  *         description: Unauthorized, take your token
  *         content:
@@ -322,7 +322,7 @@ const authController = require("../controllers/user/authController");
  *               properties:
  *                 error:
  *                   type: string
- *                   description: A message describing the error.       
+ *                   description: A message describing the error.
  */
 
 /**
@@ -358,11 +358,11 @@ const authController = require("../controllers/user/authController");
  *         content:
  *           application/json:
  *             schema:
-*                type: object
-*                properties:
-*                  updated_password:
-*                    type: string
-*                    example: $2a$10$GwA5bxzWkFOJ4e4Y.4zfR.z2ZdJhVtrILSxxuh.WGRzvkAY3IAtim
+ *                type: object
+ *                properties:
+ *                  updated_password:
+ *                    type: string
+ *                    example: $2a$10$GwA5bxzWkFOJ4e4Y.4zfR.z2ZdJhVtrILSxxuh.WGRzvkAY3IAtim
  *       400:
  *         description: Bad request.
  *         content:
@@ -393,7 +393,7 @@ const authController = require("../controllers/user/authController");
  *                 error:
  *                   type: string
  *                   description: A message describing the error.
- * 
+ *
  */
 
 /**
@@ -429,11 +429,11 @@ const authController = require("../controllers/user/authController");
  *         content:
  *           application/json:
  *             schema:
-*                type: object
-*                properties:
-*                  updated_profile_picture:
-*                    type: string
-*                    example: https://example.com/photo-1511367461989
+ *                type: object
+ *                properties:
+ *                  updated_profile_picture:
+ *                    type: string
+ *                    example: https://example.com/photo-1511367461989
  *       400:
  *         description: Bad request.
  *         content:
@@ -464,7 +464,7 @@ const authController = require("../controllers/user/authController");
  *                 error:
  *                   type: string
  *                   description: A message describing the error.
- * 
+ *
  */
 
 /**
@@ -525,7 +525,7 @@ const authController = require("../controllers/user/authController");
  *                 error:
  *                   type: string
  *                   description: A message describing the error.
- * 
+ *
  */
 
 /**
@@ -675,6 +675,8 @@ const authController = require("../controllers/user/authController");
  *     description: Use this endpoint to create a friend request to another user.
  *     tags:
  *       - Friend-requests
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: userId
@@ -764,7 +766,7 @@ const authController = require("../controllers/user/authController");
  *                 error:
  *                   type: string
  *                   description: A message describing the error.
- *       
+ *
  *       403:
  *         description: Forbidden
  *         content:
@@ -774,7 +776,7 @@ const authController = require("../controllers/user/authController");
  *               properties:
  *                 error:
  *                   type: string
- *                   description: A message describing the error.       
+ *                   description: A message describing the error.
  *       401:
  *         description: Unauthorized, take your token
  *         content:
@@ -794,7 +796,7 @@ const authController = require("../controllers/user/authController");
  *               properties:
  *                 error:
  *                   type: string
- *                   description: A message describing the error.       
+ *                   description: A message describing the error.
  */
 
 /**
@@ -853,7 +855,7 @@ const authController = require("../controllers/user/authController");
  *               properties:
  *                 error:
  *                   type: string
- *                   description: A message describing the error.       
+ *                   description: A message describing the error.
  *       401:
  *         description: Unauthorized, take your token
  *         content:
@@ -874,7 +876,7 @@ const authController = require("../controllers/user/authController");
  *                 error:
  *                   type: string
  *                   description: A message describing the error.
- * 
+ *
  */
 
 /**
@@ -922,7 +924,7 @@ const authController = require("../controllers/user/authController");
  *               properties:
  *                 error:
  *                   type: string
- *                   description: A message describing the error.       
+ *                   description: A message describing the error.
  *       401:
  *         description: Unauthorized, take your token
  *         content:
@@ -943,7 +945,7 @@ const authController = require("../controllers/user/authController");
  *                 error:
  *                   type: string
  *                   description: A message describing the error.
- * 
+ *
  */
 
 // GET ALL USERS
