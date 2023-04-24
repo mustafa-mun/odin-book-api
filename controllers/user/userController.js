@@ -278,7 +278,7 @@ exports.post_respond_to_friend_request = async (req, res, next) => {
       deletedRequest.is_accepted = false;
     }
     // Return deleted request with updated is_accepted status
-    return res.status(200).json({ deleted_request: deletedRequest });
+    return res.status(200).json({ resolved_request: deletedRequest });
   } catch (error) {
     return res.status(400).json({ error: error.message });
   }
