@@ -28,7 +28,7 @@ const options = {
     },
     servers: [
       {
-        url: "https://odinbook-ib41.onrender.com",
+        url: "https://odinbook-l98j.onrender.com",
       },
     ],
   },
